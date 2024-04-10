@@ -1,0 +1,969 @@
+TASK-1:NUMBER GUESSING GAME
+import java.util.Scanner;
+import java.util.Random;
+
+public class NumberGuessingGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        int maxAttempts = 5; // Predefined limit of attempts
+        int attempts = 0;
+        int randomNumber = random.nextInt(100) + 1; // Generates a random number between 1 and 100 (inclusive)
+
+        System.out.println("Welcome to the Number Guessing Game!");
+        System.out.println("I've picked a number between 1 and 100. Try to guess it!");
+
+        while (attempts < maxAttempts) {
+            System.out.print("Enter your guess: ");
+            int guess = scanner.nextInt();
+            attempts++;
+
+            if (guess == randomNumber) {
+                System.out.println("Congratulations! You've guessed the number correctly in " + attempts + " attempts.");
+                break;
+            } else if (guess < randomNumber) {
+                System.out.println("Too low! Try again.");
+            } else {
+                System.out.println("Too high! Try again.");
+            }
+        }
+
+        if (attempts == maxAttempts) {
+            System.out.println("Sorry, you've reached the maximum number of attempts. The correct number was: " + randomNumber);
+        }
+
+        scanner.close();
+    }
+}
+
+
+
+
+2)TASK-2   LIBRARY MANAGEMENT SYSTEM
+import java.util.ArrayList;
+
+class Book {
+    private String title;
+    private String author;
+    private boolean checkedOut;
+
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+        this.checkedOut = false;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public boolean isCheckedOut() {
+        return checkedOut;
+    }
+
+    public void setCheckedOut(boolean checkedOut) {
+        this.checkedOut = checkedOut;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", checkedOut=" + checkedOut +
+                '}';
+    }
+}
+
+class LibraryCatalog {
+    private ArrayList<Book> books;
+
+    public LibraryCatalog() {
+        this.books = new ArrayList<>();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    public Book searchByTitle(String title) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Book> searchByAuthor(String author) {
+        ArrayList<Book> result = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getAuthor().equalsIgnoreCase(author)) {
+                result.add(book);
+            }
+        }
+        return result;
+    }
+
+    public boolean checkOutBook(String title) {
+        Book book = searchByTitle(title);
+        if (book != null && !book.isCheckedOut()) {
+            book.setCheckedOut(true);
+            return true;
+        }
+        return false;
+    }
+
+    public void returnBook(String title) {
+        Book book = searchByTitle(title);
+        if (book != null && book.isCheckedOut()) {
+            book.setCheckedOut(false);
+        }
+    }
+}
+
+public class LibraryManagementSystem {
+    public static void main(String[] args) {
+        LibraryCatalog library = new LibraryCatalog();
+
+        // Adding books to the library
+        library.addBook(new Book("Java Programming", "John Doe"));
+        library.addBook(new Book("Python for Beginners", "Jane Smith"));
+        library.addBook(new Book("Data Structures and Algorithms", "Alice Johnson"));
+
+        // Searching for books
+        System.out.println("Search by title:");
+        System.out.println(library.searchByTitle("Java Programming"));
+        System.out.println("Search by author:");
+        System.out.println(library.searchByAuthor("John Doe"));
+
+        // Checking out a book
+        System.out.println("Checking out 'Java Programming'");
+        library.checkOutBook("Java Programming");
+        System.out.println(library.searchByTitle("Java Programming"));
+
+        // Returning a book
+        System.out.println("Returning 'Java Programming'");
+        library.returnBook("Java Programming");
+        System.out.println(library.searchByTitle("Java Programming"));
+    }
+}
+
+
+TASK 3   CALCULATOR APP
+import java.util.Scanner;
+
+public class CalculatorApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.print("Enter the first number: ");
+            double num1 = scanner.nextDouble();
+
+            System.out.print("Enter the second number: ");
+            double num2 = scanner.nextDouble();
+
+            System.out.print("Enter the operator (+, -, *, /): ");
+            char operator = scanner.next().charAt(0);
+
+            double result;
+
+            switch (operator) {
+                case '+':
+                    result = num1 + num2;
+                    System.out.println("Result: " + result);
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    System.out.println("Result: " + result);
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    System.out.println("Result: " + result);
+                    break;
+                case '/':
+                    if (num2 == 0) {
+                        throw new ArithmeticException("Cannot divide by zero");
+                    }
+                    result = num1 / num2;
+                    System.out.println("Result: " + result);
+                    break;
+                default:
+                    System.out.println("Invalid operator");
+            }
+        } catch (ArithmeticException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: Invalid input");
+        } finally {
+            scanner.close();
+        }
+    }
+}
+
+
+TASK4:HANGMAN GAME
+import java.util.Scanner;
+import java.util.Random;
+
+public class HangmanGame {
+    private static final String[] WORDS = {"java", "python", "programming", "computer", "algorithm"};
+    private static final int MAX_TRIES = 6;
+    private static final String[] HANGMAN = {
+        "  +---+\n" +
+        "  |   |\n" +
+        "      |\n" +
+        "      |\n" +
+        "      |\n" +
+        "      |\n" +
+        "=========",
+        "  +---+\n" +
+        "  |   |\n" +
+        "  O   |\n" +
+        "      |\n" +
+        "      |\n" +
+        "      |\n" +
+        "=========",
+        "  +---+\n" +
+        "  |   |\n" +
+        "  O   |\n" +
+        "  |   |\n" +
+        "      |\n" +
+        "      |\n" +
+        "=========",
+        "  +---+\n" +
+        "  |   |\n" +
+        "  O   |\n" +
+        " /|   |\n" +
+        "      |\n" +
+        "      |\n" +
+        "=========",
+        "  +---+\n" +
+        "  |   |\n" +
+        "  O   |\n" +
+        " /|\\  |\n" +
+        "      |\n" +
+        "      |\n" +
+        "=========",
+        "  +---+\n" +
+        "  |   |\n" +
+        "  O   |\n" +
+        " /|\\  |\n" +
+        " /    |\n" +
+        "      |\n" +
+        "=========",
+        "  +---+\n" +
+        "  |   |\n" +
+        "  O   |\n" +
+        " /|\\  |\n" +
+        " / \\  |\n" +
+        "      |\n" +
+        "========="
+    };
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        String word = WORDS[random.nextInt(WORDS.length)];
+        char[] guessedLetters = new char[word.length()];
+        boolean[] isLetterGuessed = new boolean[word.length()];
+        int tries = 0;
+
+        System.out.println("Welcome to Hangman!");
+        System.out.println("Try to guess the word.");
+
+        while (tries < MAX_TRIES) {
+            System.out.println(HANGMAN[tries]);
+            displayWord(guessedLetters);
+
+            if (isWordGuessed(isLetterGuessed)) {
+                System.out.println("Congratulations! You've guessed the word: " + word);
+                break;
+            }
+
+            System.out.print("Enter a letter: ");
+            char guess = scanner.next().charAt(0);
+
+            boolean isCorrectGuess = false;
+            for (int i = 0; i < word.length(); i++) {
+                if (word.charAt(i) == guess && !isLetterGuessed[i]) {
+                    guessedLetters[i] = guess;
+                    isLetterGuessed[i] = true;
+                    isCorrectGuess = true;
+                }
+            }
+
+            if (!isCorrectGuess) {
+                tries++;
+                System.out.println("Incorrect guess. Try again.");
+            }
+        }
+
+        if (tries == MAX_TRIES) {
+            System.out.println("You've run out of tries! The word was: " + word);
+        }
+
+        scanner.close();
+    }
+
+    private static void displayWord(char[] guessedLetters) {
+        for (char c : guessedLetters) {
+            if (c == '\0') {
+                System.out.print("_ ");
+            } else {
+                System.out.print(c + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    private static boolean isWordGuessed(boolean[] isLetterGuessed) {
+        for (boolean b : isLetterGuessed) {
+            if (!b) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+
+TASK-5   STUDENT COURSE REGISTRATION SYSTEM
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Course {
+    private String code;
+    private String title;
+    private String description;
+    private int capacity;
+    private int enrolled;
+
+    public Course(String code, String title, String description, int capacity) {
+        this.code = code;
+        this.title = title;
+        this.description = description;
+        this.capacity = capacity;
+        this.enrolled = 0;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getEnrolled() {
+        return enrolled;
+    }
+
+    public void incrementEnrolled() {
+        enrolled++;
+    }
+
+    public void decrementEnrolled() {
+        enrolled--;
+    }
+}
+
+class Student {
+    private int id;
+    private String name;
+    private ArrayList<Course> registeredCourses;
+
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.registeredCourses = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Course> getRegisteredCourses() {
+        return registeredCourses;
+    }
+
+    public void registerCourse(Course course) {
+        registeredCourses.add(course);
+        course.incrementEnrolled();
+    }
+
+    public void dropCourse(Course course) {
+        registeredCourses.remove(course);
+        course.decrementEnrolled();
+    }
+}
+
+public class CourseRegistrationSystem {
+    public static void main(String[] args) {
+        ArrayList<Course> courses = new ArrayList<>();
+        courses.add(new Course("CSCI101", "Introduction to Programming", "Fundamentals of programming with Java", 30));
+        courses.add(new Course("MATH201", "Calculus I", "Differential and integral calculus", 40));
+        courses.add(new Course("PHYS101", "Physics I", "Mechanics, heat, and sound", 35));
+
+        ArrayList<Student> students = new ArrayList<>();
+        students.add(new Student(1001, "Alice"));
+        students.add(new Student(1002, "Bob"));
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("1. Course Listing");
+            System.out.println("2. Student Registration");
+            System.out.println("3. Course Removal");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    displayCourses(courses);
+                    break;
+                case 2:
+                    registerStudent(students, courses, scanner);
+                    break;
+                case 3:
+                    removeCourse(students, courses, scanner);
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+            }
+        }
+    }
+
+    private static void displayCourses(ArrayList<Course> courses) {
+        System.out.println("Available Courses:");
+        for (Course course : courses) {
+            System.out.println(course.getCode() + " - " + course.getTitle() + " (" + course.getDescription() + ")");
+            System.out.println("Enrolled/Capacity: " + course.getEnrolled() + "/" + course.getCapacity());
+            System.out.println();
+        }
+    }
+
+    private static void registerStudent(ArrayList<Student> students, ArrayList<Course> courses, Scanner scanner) {
+        System.out.print("Enter student ID: ");
+        int studentId = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter course code to register: ");
+        String courseCode = scanner.nextLine();
+
+        Student student = findStudentById(students, studentId);
+        if (student == null) {
+            System.out.println("Student not found.");
+            return;
+        }
+
+        Course course = findCourseByCode(courses, courseCode);
+        if (course == null) {
+            System.out.println("Course not found.");
+            return;
+        }
+
+        if (course.getEnrolled() >= course.getCapacity()) {
+            System.out.println("Course is full. Cannot register.");
+            return;
+        }
+
+        student.registerCourse(course);
+        System.out.println("Student " + student.getName() + " registered for course " + course.getTitle());
+    }
+
+    private static void removeCourse(ArrayList<Student> students, ArrayList<Course> courses, Scanner scanner) {
+        System.out.print("Enter student ID: ");
+        int studentId = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter course code to remove: ");
+        String courseCode = scanner.nextLine();
+
+        Student student = findStudentById(students, studentId);
+        if (student == null) {
+            System.out.println("Student not found.");
+            return;
+        }
+
+        Course course = findCourseByCode(courses, courseCode);
+        if (course == null) {
+            System.out.println("Course not found.");
+            return;
+        }
+
+        if (!student.getRegisteredCourses().contains(course)) {
+            System.out.println("Student is not registered for this course.");
+            return;
+        }
+
+        student.dropCourse(course);
+        System.out.println("Student " + student.getName() + " dropped course " + course.getTitle());
+    }
+
+    private static Student findStudentById(ArrayList<Student> students, int id) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    private static Course findCourseByCode(ArrayList<Course> courses, String code) {
+        for (Course course : courses) {
+            if (course.getCode().equalsIgnoreCase(code)) {
+                return course;
+            }
+        }
+        return null;
+    }
+}
+
+
+
+TASK-6 EMAIL APP
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+
+public class EmailApp {
+    // Sender's credentials
+    private static final String SENDER_EMAIL = "your-email@example.com";
+    private static final String SENDER_PASSWORD = "your-email-password";
+
+    // Receiver's email
+    private static final String RECEIVER_EMAIL = "recipient@example.com";
+
+    // SMTP server properties
+    private static final String SMTP_HOST = "smtp.example.com";
+    private static final int SMTP_PORT = 587;
+
+    // IMAP server properties
+    private static final String IMAP_HOST = "imap.example.com";
+    private static final int IMAP_PORT = 993;
+
+    public static void main(String[] args) {
+        // Sending email
+        sendEmail();
+
+        // Receiving email
+        receiveEmail();
+    }
+
+    private static void sendEmail() {
+        // Sender's properties
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", SMTP_HOST);
+        props.put("mail.smtp.port", SMTP_PORT);
+
+        // Get session
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(SENDER_EMAIL, SENDER_PASSWORD);
+            }
+        });
+
+        try {
+            // Create a default MimeMessage object
+            Message message = new MimeMessage(session);
+
+            // Set From: header field of the header
+            message.setFrom(new InternetAddress(SENDER_EMAIL));
+
+            // Set To: header field of the header
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(RECEIVER_EMAIL));
+
+            // Set Subject: header field
+            message.setSubject("Testing JavaMail API");
+
+            // Set the content of the message
+            message.setText("This is a test email sent from Java.");
+
+            // Send message
+            Transport.send(message);
+
+            System.out.println("Email sent successfully!");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void receiveEmail() {
+        // Receiver's properties
+        Properties props = new Properties();
+        props.put("mail.store.protocol", "imaps");
+        props.put("mail.imap.host", IMAP_HOST);
+        props.put("mail.imap.port", IMAP_PORT);
+        props.put("mail.imap.ssl.enable", "true");
+
+        // Get session
+        Session session = Session.getDefaultInstance(props);
+
+        try {
+            // Connect to the server
+            Store store = session.getStore("imaps");
+            store.connect(IMAP_HOST, RECEIVER_EMAIL, SENDER_PASSWORD);
+
+            // Get inbox folder
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_ONLY);
+
+            // Get messages
+            Message[] messages = inbox.getMessages();
+
+            // Display messages
+            for (Message message : messages) {
+                System.out.println("Subject: " + message.getSubject());
+                System.out.println("From: " + message.getFrom()[0]);
+                System.out.println("Content: " + message.getContent().toString());
+            }
+
+            // Close the folder and store
+            inbox.close(false);
+            store.close();
+        } catch (MessagingException | java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+TASK 7:SCIENTIFIC CALCULATOR
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ScientificCalculator extends JFrame implements ActionListener {
+    private JTextField display;
+    private String input = "";
+
+    public ScientificCalculator() {
+        setTitle("Scientific Calculator");
+        setSize(300, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        display = new JTextField();
+        display.setEditable(false);
+        panel.add(display, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(5, 4, 5, 5));
+        String[] buttonLabels = {
+            "7", "8", "9", "/",
+            "4", "5", "6", "*",
+            "1", "2", "3", "-",
+            "0", ".", "=", "+",
+            "C", "DEL", "sqrt", "x^2"
+        };
+        for (String label : buttonLabels) {
+            JButton button = new JButton(label);
+            button.addActionListener(this);
+            buttonPanel.add(button);
+        }
+        panel.add(buttonPanel, BorderLayout.CENTER);
+
+        add(panel);
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        switch (command) {
+            case "C":
+                input = "";
+                break;
+            case "DEL":
+                if (!input.isEmpty()) {
+                    input = input.substring(0, input.length() - 1);
+                }
+                break;
+            case "=":
+                try {
+                    double result = evaluateExpression(input);
+                    input = String.valueOf(result);
+                } catch (NumberFormatException ex) {
+                    input = "Error";
+                }
+                break;
+            case "sqrt":
+                try {
+                    double number = Double.parseDouble(input);
+                    double sqrt = Math.sqrt(number);
+                    input = String.valueOf(sqrt);
+                } catch (NumberFormatException ex) {
+                    input = "Error";
+                }
+                break;
+            case "x^2":
+                try {
+                    double number = Double.parseDouble(input);
+                    double squared = Math.pow(number, 2);
+                    input = String.valueOf(squared);
+                } catch (NumberFormatException ex) {
+                    input = "Error";
+                }
+                break;
+            default:
+                input += command;
+                break;
+        }
+        display.setText(input);
+    }
+
+    private double evaluateExpression(String expression) {
+        return new Object() {
+            int index = -1, ch;
+
+            void nextChar() {
+                ch = (++index < expression.length()) ? expression.charAt(index) : -1;
+            }
+
+            boolean isDigit(char c) {
+                return c >= '0' && c <= '9';
+            }
+
+            double parse() {
+                nextChar();
+                double x = parseExpression();
+                if (index < expression.length()) {
+                    throw new RuntimeException("Unexpected: " + (char) ch);
+                }
+                return x;
+            }
+
+            double parseExpression() {
+                double x = parseTerm();
+                for (; ; ) {
+                    if (eat('+')) x += parseTerm();
+                    else if (eat('-')) x -= parseTerm();
+                    else return x;
+                }
+            }
+
+            double parseTerm() {
+                double x = parseFactor();
+                for (; ; ) {
+                    if (eat('*')) x *= parseFactor();
+                    else if (eat('/')) x /= parseFactor();
+                    else return x;
+                }
+            }
+
+            double parseFactor() {
+                if (eat('+')) return parseFactor();
+                if (eat('-')) return -parseFactor();
+
+                double x;
+                int startPos = this.index;
+                if (eat('(')) {
+                    x = parseExpression();
+                    eat(')');
+                } else if (isDigit((char) ch) || ch == '.') {
+                    while (isDigit((char) ch) || ch == '.') nextChar();
+                    x = Double.parseDouble(expression.substring(startPos, this.index));
+                } else {
+                    throw new RuntimeException("Unexpected: " + (char) ch);
+                }
+
+                if (eat('^')) x = Math.pow(x, parseFactor());
+
+                return x;
+            }
+
+            boolean eat(int charToEat) {
+                while (ch == ' ') nextChar();
+                if (ch == charToEat) {
+                    nextChar();
+                    return true;
+                }
+                return false;
+            }
+        }.parse();
+    }
+
+    public static void main(String[] args) {
+        new ScientificCalculator();
+    }
+}
+
+
+TASK 8:BRICK BREAKER GAME
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class BrickBreakerGame extends JPanel implements ActionListener, KeyListener {
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
+    private static final int PADDLE_WIDTH = 100;
+    private static final int PADDLE_HEIGHT = 10;
+    private static final int BALL_DIAMETER = 20;
+    private static final int BRICK_WIDTH = 60;
+    private static final int BRICK_HEIGHT = 30;
+    private static final int ROWS = 5;
+    private static final int COLS = 10;
+    private static final int PADDLE_SPEED = 10;
+    private static final int BALL_SPEED = 5;
+
+    private boolean gameRunning = true;
+    private boolean ballMoving = false;
+    private int paddleX = WIDTH / 2 - PADDLE_WIDTH / 2;
+    private int ballX = WIDTH / 2 - BALL_DIAMETER / 2;
+    private int ballY = HEIGHT / 2 - BALL_DIAMETER / 2;
+    private int ballXSpeed = BALL_SPEED;
+    private int ballYSpeed = BALL_SPEED;
+    private boolean[] bricks = new boolean[ROWS * COLS];
+
+    public BrickBreakerGame() {
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setBackground(Color.BLACK);
+        addKeyListener(this);
+        setFocusable(true);
+
+        // Initialize bricks
+        for (int i = 0; i < ROWS * COLS; i++) {
+            bricks[i] = true;
+        }
+
+        Timer timer = new Timer(1000 / 60, this);
+        timer.start();
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Draw paddle
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(paddleX, HEIGHT - PADDLE_HEIGHT - 20, PADDLE_WIDTH, PADDLE_HEIGHT);
+
+        // Draw ball
+        g2d.setColor(Color.RED);
+        g2d.fillOval(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER);
+
+        // Draw bricks
+        int brickIndex = 0;
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (bricks[brickIndex]) {
+                    g2d.setColor(Color.BLUE);
+                    g2d.fillRect(col * BRICK_WIDTH + 10, row * BRICK_HEIGHT + 10, BRICK_WIDTH, BRICK_HEIGHT);
+                }
+                brickIndex++;
+            }
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (gameRunning) {
+            moveBall();
+            checkCollisions();
+            repaint();
+        }
+    }
+
+    public void moveBall() {
+        if (ballMoving) {
+            ballX += ballXSpeed;
+            ballY += ballYSpeed;
+            if (ballX <= 0 || ballX >= WIDTH - BALL_DIAMETER) {
+                ballXSpeed = -ballXSpeed;
+            }
+            if (ballY <= 0) {
+                ballYSpeed = -ballYSpeed;
+            }
+            if (ballY >= HEIGHT - BALL_DIAMETER) {
+                gameRunning = false; // Game over
+            }
+        }
+    }
+
+    public void checkCollisions() {
+        Rectangle ballRect = new Rectangle(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER);
+        Rectangle paddleRect = new Rectangle(paddleX, HEIGHT - PADDLE_HEIGHT - 20, PADDLE_WIDTH, PADDLE_HEIGHT);
+
+        if (ballRect.intersects(paddleRect)) {
+            ballYSpeed = -ballYSpeed;
+        }
+
+        int brickIndex = 0;
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (bricks[brickIndex]) {
+                    Rectangle brickRect = new Rectangle(col * BRICK_WIDTH + 10, row * BRICK_HEIGHT + 10, BRICK_WIDTH, BRICK_HEIGHT);
+                    if (ballRect.intersects(brickRect)) {
+                        bricks[brickIndex] = false;
+                        ballYSpeed = -ballYSpeed;
+                    }
+                }
+                brickIndex++;
+            }
+        }
+    }
+
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT) {
+            paddleX -= PADDLE_SPEED;
+        } else if (key == KeyEvent.VK_RIGHT) {
+            paddleX += PADDLE_SPEED;
+        } else if (key == KeyEvent.VK_SPACE) {
+            ballMoving = true;
+        }
+        if (paddleX <= 0) {
+            paddleX = 0;
+        }
+        if (paddleX >= WIDTH - PADDLE_WIDTH) {
+            paddleX = WIDTH - PADDLE_WIDTH;
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {}
+
+    public void keyTyped(KeyEvent e) {}
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Brick Breaker");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.add(new BrickBreakerGame(), BorderLayout.CENTER);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+}
